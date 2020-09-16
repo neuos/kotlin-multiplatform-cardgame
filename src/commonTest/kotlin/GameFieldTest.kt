@@ -9,22 +9,25 @@ import kotlin.test.assertEquals
 internal class GameFieldTest {
     @Test
     fun twoPlayers(){
-        val gameField = Game()
+        val game = Game()
         val player1 = Player("p1")
         val player2 = Player("p2")
 
-        gameField.addPlayer(player1)
-        gameField.addPlayer(player2)
+        game.addPlayer(player1)
+        game.addPlayer(player2)
 
+        assertEquals(game.state, GameState.LOBBY)
+        game.start()
+        assertEquals(game.state, GameState.RUNNING)
 
-        assertEquals(gameField.gamePerspective(player1).player.cards.size, 7)
-        assertEquals(gameField.gamePerspective(player2).player.cards.size, 7)
+        assertEquals(game.gamePerspective(player1).player.cards.size, 7)
+        assertEquals(game.gamePerspective(player2).player.cards.size, 7)
 
     }
 
     @Test
     fun fullDeck() {
         val deck = createDeck()
-        assertEquals(10 * 4 + 5, deck.size)
+        assertEquals(108, deck.size)
     }
 }
