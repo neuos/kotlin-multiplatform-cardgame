@@ -5,11 +5,13 @@ buildscript {
 }
 
 plugins {
-    id 'org.jetbrains.kotlin.multiplatform' version '1.4.0'
+    id 'org.jetbrains.kotlin.multiplatform' version '1.4.10'
+    id 'com.github.ben-manes.versions' version '0.33.0'
+
 }
 repositories {
     jcenter()
-    maven { url "https://dl.bintray.com/kotlin/ktor" }
+    maven { url 'https://dl.bintray.com/kotlin/ktor' }
     mavenCentral()
 }
 def ktor_version = '1.4.0'
@@ -72,7 +74,7 @@ jvmJar {
 
 task run(type: JavaExec, dependsOn: [jvmJar]) {
     group = "application"
-    main = "sample.SampleJvmKt"
+    main = "server.CardApplicationKt"
     classpath(configurations.jvmRuntimeClasspath, jvmJar)
     args = []
 }

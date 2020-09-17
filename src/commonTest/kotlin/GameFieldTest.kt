@@ -1,14 +1,9 @@
-package sample
-
-import Game
-import Player
-import createDeck
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 internal class GameFieldTest {
     @Test
-    fun twoPlayers(){
+    fun twoPlayers() {
         val game = Game()
         val player1 = Player("p1")
         val player2 = Player("p2")
