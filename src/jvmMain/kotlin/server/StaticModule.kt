@@ -9,5 +9,8 @@ fun Application.staticModule() {
         static("/static") {
             resource("kotlin-multiplatform-cardgame.js")
         }
+        static("/") {
+            resource("favicon.ico")
+        }
     }
 }
