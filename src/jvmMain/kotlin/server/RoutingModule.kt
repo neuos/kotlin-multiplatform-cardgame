@@ -7,14 +7,11 @@ import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.html.*
 import io.ktor.http.*
-import io.ktor.http.content.*
 import io.ktor.jackson.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import kotlinx.html.*
-
-
 
 
 private object Lobby {
@@ -43,6 +40,19 @@ fun Application.routingModule() {
                         id = "sendMessageButton"
                         +"Send Message"
                     }
+                    input {
+                        id = "nameInput"
+                        type = InputType.text
+                        label { +"Name" }
+                    }
+                    button {
+                        id = "nameButton"
+                        +"Set Name"
+                    }
+
+
+
+
                     script(src = "/static/kotlin-multiplatform-cardgame.js") {}
                 }
             }
@@ -112,8 +122,6 @@ fun Application.routingModule() {
             } else call.respond(HttpStatusCode.BadRequest)
         }
 
-
-
         post("/lobby") {
             val post = call.receiveParameters()
             val name = post["name"]!!
@@ -124,5 +132,17 @@ fun Application.routingModule() {
             call.respondRedirect("/game/$id")
         }
 
+        post("/name") {
+            call.currentSession?.let { session ->
+                call.parameters["name"]?.let { name ->
+                    session.name = name
+                    call.respond(session.name!!)
+                }?:call.respond(HttpStatusCode.BadRequest, "No Name given")
+            }?:call.respond(HttpStatusCode.BadRequest, "No Session")
+        }
+
+        get("/name"){
+            call.respond(call.currentSession?.name?:"No name set yet")
+        }
     }
 }

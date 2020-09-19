@@ -1,5 +1,6 @@
 import io.ktor.client.*
 import io.ktor.client.features.websocket.*
+import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.http.cio.websocket.*
 import io.ktor.util.*
@@ -13,19 +14,44 @@ import org.w3c.dom.HTMLInputElement
 
 @KtorExperimentalAPI
 fun main() {
-    console.log("Main")
-    val wsClient = WsClient(HttpClient { install(WebSockets) })
-    console.log("websocket client created")
+    val httpClient = HttpClient { install(WebSockets) }
+    val wsClient = WsClient(httpClient)
+    val apiCLient = Client(httpClient, "http://localhost:8080")
+
     GlobalScope.launch { initializeWebsocket(wsClient) }
+
     val sendButton = document.getElementById("sendMessageButton") as HTMLButtonElement
     val messageInput = document.getElementById("messageInput") as HTMLInputElement
-    console.log(sendButton)
-    console.log(messageInput)
+    val nameButton = document.getElementById("nameButton") as HTMLButtonElement
+    val nameInput = document.getElementById("nameInput") as HTMLInputElement
 
     sendButton.addEventListener("click", {
         val message = messageInput.value
         GlobalScope.launch { wsClient.send(message) }
     })
+
+    nameButton.addEventListener("click", {
+        val name = nameInput.value
+        GlobalScope.launch {
+            apiCLient.post("name", Client.Parameter("name", name))
+        }
+    })
+}
+
+
+class Client(val httpClient: HttpClient, val apiUrl: String) {
+    suspend inline fun <reified T> post(endpoint: String, vararg parameters: Parameter): T {
+        val response :T= httpClient.post {
+            url("$apiUrl/$endpoint")
+            parameters.forEach {
+                parameter(it.key, it.value)
+            }
+        }
+        console.log(response)
+        return response
+    }
+
+    class Parameter(val key: String, val value: String)
 }
 
 private suspend fun initializeWebsocket(wsClient: WsClient) {

@@ -8,6 +8,8 @@ fun main() {
         routingModule()
         websocketModule()
         staticModule()
+        sessionModule()
+        corsModule()
     }
     server.start(wait = true)
 }
