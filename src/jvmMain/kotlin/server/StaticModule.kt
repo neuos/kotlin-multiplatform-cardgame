@@ -11,6 +11,7 @@ fun Application.staticModule() {
         }
         static("/") {
             resource("favicon.ico")
+            resource("style.css")
         }
     }
 }

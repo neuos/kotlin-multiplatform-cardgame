@@ -26,11 +26,27 @@ fun Application.routingModule() {
 
     routing {
         get("/") {
+            val session = call.currentSession
             call.respondHtml {
                 head {
                     title("Hello from Ktor!")
+                    styleLink("/style.css")
                 }
                 body {
+                    h1{
+                        +"Welcome ${session?.name?:"choose a name"}"
+                    }
+                    if(session?.name==null){
+                        input {
+                            id = "nameInput"
+                            type = InputType.text
+                            label { +"Name" }
+                        }
+                        button {
+                            id = "nameButton"
+                            +"Set Name"
+                        }
+                    }
                     input {
                         id = "messageInput"
                         type = InputType.text
@@ -40,18 +56,9 @@ fun Application.routingModule() {
                         id = "sendMessageButton"
                         +"Send Message"
                     }
-                    input {
-                        id = "nameInput"
-                        type = InputType.text
-                        label { +"Name" }
+                    div{
+                        id = "handcards"
                     }
-                    button {
-                        id = "nameButton"
-                        +"Set Name"
-                    }
-
-
-
 
                     script(src = "/static/kotlin-multiplatform-cardgame.js") {}
                 }

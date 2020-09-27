@@ -1,0 +1,15 @@
+.card{
+    width: 64px;
+    height: 128px;
+    border-radius: 8px;
+    -webkit-text-stroke: 2px white
+}
+
+#handcards{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#handcards .card{
+    margin: 4px;
+}
